@@ -13,7 +13,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "color_by_numbers",
+    name = "colorbynumbers",
     version = "0.1.0",
     author = "Peter Rennert",
     author_email = "github@rennert.io",
@@ -21,7 +21,7 @@ setup(
     packages=find_packages(),
     #license = read('LICENSE.txt'),
     keywords = "audio",
-    url = "https://github.com/groakat/color_by_numbers",
+    url = "https://github.com/groakat/colorbynumbers",
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 4 - Beta",
