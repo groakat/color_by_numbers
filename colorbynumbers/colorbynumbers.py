@@ -11,6 +11,7 @@ import skimage.measure as skim
 from skimage.segmentation import felzenszwalb, slic, quickshift
 from skimage.segmentation import mark_boundaries
 import time
+import os
 
 
 def load_image(path):
@@ -140,7 +141,7 @@ def image_to_color_in(img):
     new_img, mapping, dom_colors, means = calculate_mapping(img, segments)
     fig = plt.figure(figsize=(30,20))
     plot_print_out(img, segments, mapping)
-    
+
     plotfile = os.path.join('static', str(time.time()) + '.png')
     plt.savefig(plotfile)
     return plotfile
