@@ -23,8 +23,10 @@ def apply_color_transform(img):
 def inverse_color_transform(img):
     return skic.lab2rgb(img)
 
-def segment_image(img):    
-    segments_slic = slic(img, n_segments=500, compactness=20, sigma=2)
+def segment_image(img, n_segments=500, compactness=20, sigma=2):    
+    segments_slic = slic(img, n_segments=n_segments, 
+                              compactness=compactness,
+                              sigma=sigma)
     
     # break disconnected regions
     segments = np.zeros_like(segments_slic)
@@ -125,9 +127,9 @@ def plot_segment_numbers(img, segments, mapping):
         ax.text(c[1], c[0], "{}".format(color), style='italic', size=8, alpha=0.5)
     
 
-def calculate_mapping(img, segments):
+def calculate_mapping(img, segments, n_colors):
     means = get_mean_of_segments(img, segments)
-    dom_colors = segments_colors_to_dominant_colors(means)
+    dom_colors = segments_colors_to_dominant_colors(means, n_colors)
     new_img, mapping = apply_values_to_segments(img, segments, dom_colors)
     
     return new_img, mapping, dom_colors, means
@@ -136,9 +138,12 @@ def plot_print_out(img, segments, mapping):
     plot_segments(np.ones_like(img), segments)
     plot_segment_numbers(img, segments, mapping)
 
-def image_to_color_in(img):
+def image_to_color_in(img, n_segments=500, compactness=20, 
+                           sigma=2, n_colors=30):
     segments = segment_image(img)
-    new_img, mapping, dom_colors, means = calculate_mapping(img, segments)
+    new_img, mapping, dom_colors, means = calculate_mapping(img, 
+                                                            segments,
+                                                            n_colors)
     fig = plt.figure(figsize=(30,20))
     plot_print_out(img, segments, mapping)
 
