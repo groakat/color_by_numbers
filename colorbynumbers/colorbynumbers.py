@@ -153,6 +153,7 @@ def plot_print_out(img, segments, mapping):
 def plot_palette(dom_colors):
     fig = plt.gcf()
 
+    fig.suptitle('Farbpalette', fontsize=14, fontweight='bold')
     l = len(dom_colors)
     w = 5.0
     h = np.ceil(l / w)
@@ -162,9 +163,13 @@ def plot_palette(dom_colors):
 
         ax.set_axis_bgcolor(c)
 
-        ax.text(25, 25, "{}".format(i), style='italic', size=8, alpha=0.5)
+        # ax.text(25, 25, "{}".format(i), style='bold', size=18, alpha=0.5)
+        ax.set_title("{}".format(i))
         ax.set_xlim([0, 50])
         ax.set_ylim([0, 50])
+        ax.xaxis.set_major_locator(plt.NullLocator())
+        ax.yaxis.set_major_locator(plt.NullLocator())
+        ax.set_aspect('equal')
 
 
 def image_to_color_in(img, n_segments=500, compactness=20, 
@@ -186,11 +191,13 @@ def image_to_color_in(img, n_segments=500, compactness=20,
 
     plotfile_segments = os.path.join(folder_prefix,
                                      'static', str(time.time()) + '_segments.png')
+    plt.axis('off')
     plt.savefig(plotfile_segments)
 
 
     fig = plt.figure(figsize=(30,20))
     plt.imshow(new_img)
+    plt.axis('off')
 
     plotfile_model = os.path.join(folder_prefix,
                                   'static', str(time.time()) + '_model.png')
