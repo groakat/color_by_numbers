@@ -7,6 +7,7 @@ import sklearn.cluster as sklc
 from skimage.util import img_as_float
 from skimage.data import astronaut
 import skimage.measure as skim
+from scipy import ndimage as ndi 
 
 from skimage.segmentation import felzenszwalb, slic, quickshift
 from skimage.segmentation import mark_boundaries
@@ -108,13 +109,20 @@ def apply_values_to_segments(img, segments, segment_colors):
         
     return new_img, mapping
 
-        
+def get_segment_number_pos(segments, idx):
+    distance = ndi.distance_transform_edt(segments == idx)
+    pos = np.unravel_index(np.argmax(distance.ravel()), distance.shape)
+    return pos
+
 def get_segment_centroids(segments):
     # +1 because some segments will be 0 which is treated as background by region props
     # https://github.com/scikit-image/scikit-image/issues/941
-    rps = skim.regionprops(segments + 1)
-    c = [rp['centroid'] for rp in rps]
+    # rps = skim.regionprops(segments + 1)
+    # c = [rp['centroid'] for rp in rps]
     
+    c = [get_segment_number_pos(segments, idx) 
+                                for idx in range(np.max(segments.ravel()))]
+
     return c
 
 def plot_segment_numbers(img, segments, mapping):
