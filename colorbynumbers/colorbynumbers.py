@@ -139,7 +139,11 @@ def plot_print_out(img, segments, mapping):
     plot_segment_numbers(img, segments, mapping)
 
 def image_to_color_in(img, n_segments=500, compactness=20, 
-                           sigma=2, n_colors=30):
+                           sigma=2, n_colors=30,
+                           folder_prefix=None):
+    if folder_prefix is None:
+        folder_prefix = "."
+
     segments = segment_image(img)
     new_img, mapping, dom_colors, means = calculate_mapping(img, 
                                                             segments,
@@ -147,13 +151,15 @@ def image_to_color_in(img, n_segments=500, compactness=20,
     fig = plt.figure(figsize=(30,20))
     plot_print_out(img, segments, mapping)
 
-    plotfile_segments = os.path.join('static', str(time.time()) + '_segments.png')
+    plotfile_segments = os.path.join(folder_prefix,
+                                     'static', str(time.time()) + '_segments.png')
     plt.savefig(plotfile_segments)
 
 
     fig = plt.figure(figsize=(30,20))
     plt.imshow(new_img)
 
-    plotfile_model = os.path.join('static', str(time.time()) + '_model.png')
+    plotfile_model = os.path.join(folder_prefix,
+                                  'static', str(time.time()) + '_model.png')
     plt.savefig(plotfile_model)
     return plotfile_segments, plotfile_model
