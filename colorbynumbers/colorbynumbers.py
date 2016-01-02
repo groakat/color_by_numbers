@@ -162,7 +162,7 @@ def plot_palette(dom_colors):
 
         ax.set_axis_bgcolor(c)
 
-        ax.text(25, 25, "{}".format(color), style='italic', size=8, alpha=0.5)
+        ax.text(25, 25, "{}".format(i), style='italic', size=8, alpha=0.5)
         ax.set_xlim([0, 50])
         ax.set_ylim([0, 50])
 
