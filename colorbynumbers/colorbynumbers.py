@@ -43,7 +43,6 @@ def segment_image(img, n_segments=500, compactness=20, sigma=2):
     
 def plot_segments(img, segments):
     plt.imshow(mark_boundaries(img, segments, color=[0.8, 0.8, 0.8]))
-    plt.title("SLIC")
     
     
 def get_mean_of_segments(img, segments):
