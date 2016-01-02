@@ -109,18 +109,20 @@ def apply_values_to_segments(img, segments, segment_colors):
         
     return new_img, mapping
 
-def get_segment_number_pos(segments, idx):
-    distance = ndi.distance_transform_edt(segments == idx)
+def get_segment_number_pos(segments, idx, bbs):
+    x1, y1, x2, y2 = bbs[idx]
+    distance = ndi.distance_transform_edt(segments[x1:x2, y1:y2] == idx)
     pos = np.unravel_index(np.argmax(distance.ravel()), distance.shape)
+    pos += np.asarray([x1, y1])
     return pos
 
 def get_segment_centroids(segments):
     # +1 because some segments will be 0 which is treated as background by region props
     # https://github.com/scikit-image/scikit-image/issues/941
-    # rps = skim.regionprops(segments + 1)
-    # c = [rp['centroid'] for rp in rps]
+    rps = skim.regionprops(segments + 1)
+    bbs = [rp['bbox'] for rp in rps]
     
-    c = [get_segment_number_pos(segments, idx) 
+    c = [get_segment_number_pos(segments, idx, bbs) 
                                 for idx in range(np.max(segments.ravel()))]
 
     return c
