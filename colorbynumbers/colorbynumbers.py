@@ -148,6 +148,25 @@ def plot_print_out(img, segments, mapping):
     plot_segments(np.ones_like(img), segments)
     plot_segment_numbers(img, segments, mapping)
 
+
+def plot_palette(dom_colors):
+    fig = plt.gcf()
+
+    l = len(dom_colors)
+    w = 5.0
+    h = np.ceil(l / w)
+
+    axes = fig.add_subplotL(h, w)
+
+    for i, c in enumerate(dom_colors):
+        ax = axes[i]
+        ax.set_axis_bgcolor(c)
+
+        ax.text(25, 25, "{}".format(color), style='italic', size=8, alpha=0.5)
+        ax.set_xlim([0, 50])
+        ax.set_ylim([0, 50])
+
+
 def image_to_color_in(img, n_segments=500, compactness=20, 
                            sigma=2, n_colors=30,
                            folder_prefix=None):
@@ -175,4 +194,16 @@ def image_to_color_in(img, n_segments=500, compactness=20,
     plotfile_model = os.path.join(folder_prefix,
                                   'static', str(time.time()) + '_model.png')
     plt.savefig(plotfile_model)
-    return plotfile_segments[len(folder_prefix):], plotfile_model[len(folder_prefix):]
+
+    fig = plt.figure(figsize=(30,20))
+    plot_palette(dom_colors)
+
+    plotfile_palette = os.path.join(folder_prefix,
+                                  'static', str(time.time()) + '_palette.png')
+    plt.savefig(plotfile_palette)
+
+
+
+    return (plotfile_segments[len(folder_prefix):], 
+            plotfile_model[len(folder_prefix):], 
+            plotfile_palette[len(folder_prefix):])
