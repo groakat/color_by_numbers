@@ -93,7 +93,8 @@ def segments_colors_to_dominant_colors(segment_means, n_colors=10):
     
     print len(segment_means)
     
-    new_colors = {i: cc_lab_2_rgb[tuple(cc[kmeans.predict(c)][0])] for i, c in enumerate(mean_colors_lab)}
+    new_colors = {i: cc_lab_2_rgb[tuple(cc[kmeans.predict(c)][0])] 
+                            for i, c in enumerate(mean_colors_lab)}
     
     return new_colors
 
@@ -107,7 +108,7 @@ def apply_values_to_segments(img, segments, segment_colors):
         new_img[segments == s] = rgb        
         mapping += [colors.index(tuple(rgb))]
         
-    return new_img, mapping
+    return new_img, mapping, colors
 
 def get_segment_number_pos(segments, idx, bbs):
     x1, y1, x2, y2 = bbs[idx]
@@ -140,9 +141,9 @@ def plot_segment_numbers(img, segments, mapping):
 def calculate_mapping(img, segments, n_colors):
     means = get_mean_of_segments(img, segments)
     dom_colors = segments_colors_to_dominant_colors(means, n_colors)
-    new_img, mapping = apply_values_to_segments(img, segments, dom_colors)
+    new_img, mapping, ordered_colors = apply_values_to_segments(img, segments, dom_colors)
     
-    return new_img, mapping, dom_colors, means
+    return new_img, mapping, dom_colors, means, ordered_colors
     
 def plot_print_out(img, segments, mapping):
     plot_segments(np.ones_like(img), segments)
@@ -177,9 +178,10 @@ def image_to_color_in(img, n_segments=500, compactness=20,
     folder_prefix = os.path.join(folder_prefix, '')
 
     segments = segment_image(img)
-    new_img, mapping, dom_colors, means = calculate_mapping(img, 
-                                                            segments,
-                                                            n_colors)
+    new_img, mapping, dom_colors, means, ordered_colors = \
+                                                    calculate_mapping(img, 
+                                                    segments,
+                                                    n_colors)
     fig = plt.figure(figsize=(30,20))
     plot_print_out(img, segments, mapping)
 
@@ -196,7 +198,7 @@ def image_to_color_in(img, n_segments=500, compactness=20,
     plt.savefig(plotfile_model)
 
     fig = plt.figure(figsize=(30,20))
-    plot_palette(dom_colors)
+    plot_palette(ordered_colors)
 
     plotfile_palette = os.path.join(folder_prefix,
                                   'static', str(time.time()) + '_palette.png')
