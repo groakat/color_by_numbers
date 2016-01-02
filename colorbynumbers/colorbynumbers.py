@@ -158,7 +158,7 @@ def plot_palette(dom_colors):
     h = np.ceil(l / w)
 
     for i, c in enumerate(dom_colors):
-        ax = fig.add_subplot(int(h), int(w), i)
+        ax = fig.add_subplot(int(h), int(w), i + 1)
 
         ax.set_axis_bgcolor(c)
 
