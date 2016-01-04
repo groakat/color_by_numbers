@@ -30,15 +30,17 @@ def segment_image(img, n_segments=500, compactness=20, sigma=2):
                               sigma=sigma)
     
     # break disconnected regions
-    segments = np.zeros_like(segments_slic)
-    cur_seg_no = 0
+    # segments = np.zeros_like(segments_slic)
+    # cur_seg_no = 0
     
-    for i in range(np.max(segments_slic.ravel())):
-        sep_segments = skim.label(segments_slic==i, background=0)
-        for k in range(np.max(sep_segments.ravel()) + 1):
-            segments[sep_segments == k] = cur_seg_no
-            cur_seg_no += 1
+    # for i in range(np.max(segments_slic.ravel())):
+    #     sep_segments = skim.label(segments_slic==i, background=0)
+    #     for k in range(np.max(sep_segments.ravel()) + 1):
+    #         segments[sep_segments == k] = cur_seg_no
+    #         cur_seg_no += 1
     
+    segments = skim.label(segments_slic)
+
     return segments
     
 def plot_segments(img, segments):
