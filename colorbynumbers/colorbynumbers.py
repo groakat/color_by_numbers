@@ -111,9 +111,14 @@ def apply_values_to_segments(img, segments, segment_colors):
 
 def get_segment_number_pos(segments, idx, bbs):
     x1, y1, x2, y2 = bbs[idx]
-    distance = ndi.distance_transform_edt(segments[x1:x2, y1:y2] == idx)
+    cut_out_segments = segments[x1:x2, y1:y2]
+    frame_for_segments = np.zeros((cut_out_segments.shape[0] + 2,
+                                   cut_out_segments.shape[1] + 2))
+    frame_for_segments[1:-1, 1:-1] = cut_out_segments
+
+    distance = ndi.distance_transform_edt(frame_for_segments == idx)
     pos = np.unravel_index(np.argmax(distance.ravel()), distance.shape)
-    pos += np.asarray([x1, y1])
+    pos += np.asarray([x1-1, y1-1])
     return pos
 
 def get_segment_centroids(segments):
@@ -190,7 +195,7 @@ def image_to_color_in(img, n_segments=500, compactness=20,
 
     plotfile_segments = os.path.join(folder_prefix,
                                      'static', str(time.time()) + '_segments.png')
-    plt.axis('off')
+    plt.axis('off', bbox_inches='tight')
     plt.savefig(plotfile_segments)
 
 
@@ -200,7 +205,7 @@ def image_to_color_in(img, n_segments=500, compactness=20,
 
     plotfile_model = os.path.join(folder_prefix,
                                   'static', str(time.time()) + '_model.png')
-    plt.savefig(plotfile_model)
+    plt.savefig(plotfile_model, bbox_inches='tight')
 
     fig = plt.figure(figsize=(30,20))
     plot_palette(ordered_colors)
