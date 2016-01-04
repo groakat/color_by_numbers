@@ -185,7 +185,9 @@ def image_to_color_in(img, n_segments=500, compactness=20,
     # force trailing '/'
     folder_prefix = os.path.join(folder_prefix, '')
 
-    segments = segment_image(img)
+    segments = segment_image(img, n_segments=n_segments,
+                                  compactness=compactness,
+                                  sigma=sigma)
     new_img, mapping, dom_colors, means, ordered_colors = \
                                                     calculate_mapping(img, 
                                                     segments,
